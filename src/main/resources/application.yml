@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: votacao-pauta
+  datasource:
+    url: jdbc:oracle:thin:@//${ORACLEDB_HOST:localhost}:${ORACLEDB_PORT:1521}/${ORACLEDB_SERVICENAME:xe.localdomain}
+    username: ${ORACLEDB_USERNAME:votacao_pauta}
+    password: ${ORACLEDB_PASSWORD:votacao_pauta}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    properties:
+      hibernate.order_by.default_null_ordering: first
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
