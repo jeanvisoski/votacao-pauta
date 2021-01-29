@@ -1,8 +1,13 @@
 package com.api.contractVoting.service;
 
+import com.api.contractVoting.dtos.ResultDTO;
+import com.api.contractVoting.dtos.ScheduleDTO;
+import com.api.contractVoting.dtos.VotingDTO;
 import com.api.contractVoting.dtos.VotingSessionOpenDTO;
 import com.api.contractVoting.dtos.VotingSessionDTO;
+import com.api.contractVoting.entity.VotingSessionEntity;
 import com.api.contractVoting.exception.NotFoundException;
+import com.api.contractVoting.repository.VotingRepository;
 import com.api.contractVoting.repository.VotingSessionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +27,19 @@ public class VotingSessionService {
     private static final Integer TEMPO_DEFAULT = 1;
 
     private final VotingSessionRepository repository;
-    private final ContractService contractService;
+    private final VotingRepository votingRepository;
+    private final ScheduleService contractService;
     private static final String UTC = "UTC-3";
 
     @Autowired
-    public VotingSessionService(VotingSessionRepository repository, ContractService contractService) {
+    public VotingSessionService(VotingSessionRepository repository, VotingRepository votingRepository, ScheduleService contractService) {
         this.repository = repository;
+        this.votingRepository = votingRepository;
         this.contractService = contractService;
     }
 
     @Transactional
-    public VotingSessionDTO openVotingSession(VotingSessionOpenDTO VotingSessionOpenDTO) {
+    public VotingSessionEntity openVotingSession(VotingSessionOpenDTO VotingSessionOpenDTO) {
         log.debug("Abrindo a sessao de votacao para a pauta {}", VotingSessionOpenDTO.getContractId());
 
         if (contractService.isContractValid(VotingSessionOpenDTO.getContractId())) {
@@ -97,10 +104,36 @@ public class VotingSessionService {
     }
 
     @Transactional
-    public VotingSessionDTO save(VotingSessionDTO dto) { log.debug("Salvando a sessao de votacao");
+    public VotingSessionEntity save(VotingSessionDTO dto) { log.debug("Salvando a sessao de votacao");
         if (Optional.ofNullable(dto).isPresent()) {
-            return VotingSessionDTO.toDTO(repository.save(VotingSessionDTO.toEntity(dto)));
+            return repository.save(VotingSessionDTO.toEntity(dto));
         }
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public ResultDTO searchDataResultVoting(Integer contractId, Integer votingSessionId) {
+        if (isValidDateExist(contractId, votingSessionId) && isSessaoValidaForCount(votingSessionId)) {
+            log.debug("Construindo o objeto de retorno do resultado para contractId = {}, votingSessionId = {}", contractId, votingSessionId);
+            return new ResultDTO(ScheduleDTO.toDTO(contractService.searchContractById(contractId)), searchResultVoting(contractId, votingSessionId));
+        }
+        throw new NotFoundException("Sessão de votação ainda está aberta, não é possível obter a contagem do resultado.");
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isValidDateExist(Integer contractId, Integer votingSessionId) {
+        return isSessionVoting(votingSessionId) && contractService.isContractValid(contractId);
+    }
+
+    @Transactional(readOnly = true)
+    public VotingDTO searchResultVoting(Integer contractId, Integer votingSessionId) {
+        log.debug("Contabilizando os votos para contractId = {}, votingSessionId = {}", contractId, votingSessionId);
+
+        return VotingDTO.builder()
+                .contractId(contractId)
+                .votingSessionId(votingSessionId)
+                .quantityVoteYes(votingRepository.countVotingByContractIdAndVotingSessionIdAndVote(contractId, votingSessionId, Boolean.TRUE))
+                .quantityVoteNo(votingRepository.countVotingByContractIdAndVotingSessionIdAndVote(contractId, votingSessionId, Boolean.FALSE))
+                .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.api.contractVoting.dtos;
 
-import com.api.contractVoting.entity.ContractEntity;
+import com.api.contractVoting.entity.ScheduleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,22 +12,22 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContractDTO {
+public class ScheduleDTO {
 
     private Integer id;
 
     @NotBlank(message = "Descrição deve ser preenchido")
     private String descricao;
 
-    public static ContractEntity toEntity(ContractDTO dto) {
-        return ContractEntity.builder()
+    public static ScheduleEntity toEntity(ScheduleDTO dto) {
+        return ScheduleEntity.builder()
                 .id(dto.getId())
                 .descricao(dto.getDescricao())
                 .build();
     }
 
-    public static ContractDTO toDTO(ContractEntity contract) {
-        return ContractDTO.builder()
+    public static ScheduleDTO toDTO(ScheduleEntity contract) {
+        return ScheduleDTO.builder()
                 .id(contract.getId())
                 .descricao(contract.getDescricao())
                 .build();

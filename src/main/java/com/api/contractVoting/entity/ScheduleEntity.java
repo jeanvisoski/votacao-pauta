@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "contract")
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContractEntity {
+public class ScheduleEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "ID")

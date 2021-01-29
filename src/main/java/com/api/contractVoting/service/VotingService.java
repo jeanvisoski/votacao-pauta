@@ -2,6 +2,7 @@ package com.api.contractVoting.service;
 
 import com.api.contractVoting.dtos.AssociatedDTO;
 import com.api.contractVoting.dtos.ResultDTO;
+import com.api.contractVoting.dtos.ScheduleDTO;
 import com.api.contractVoting.dtos.VoteDTO;
 import com.api.contractVoting.dtos.VotingDTO;
 import com.api.contractVoting.exception.NotFoundException;
@@ -18,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class VotingService {
 
     private final VotingRepository repository;
-    private final ContractService contractService;
+    private final ScheduleService contractService;
     private final VotingSessionService votingSessionService;
     private final AssociatedService associatedService;
 
     @Autowired
-    public VotingService(VotingRepository repository, ContractService pautaService, VotingSessionService sessaoVotacaoService, AssociatedService associadoService) {
+    public VotingService(VotingRepository repository, ScheduleService pautaService, VotingSessionService sessaoVotacaoService, AssociatedService associadoService) {
         this.repository = repository;
         this.contractService = pautaService;
         this.votingSessionService = sessaoVotacaoService;
@@ -64,6 +65,8 @@ public class VotingService {
 
             registerAssociatedVoted(dto);
 
+            log.debug("Voto associado finalizado associado = {}", dto.getAssociatedCpf());
+
             return "Voto registrado com sucesso!";
         }
         return null;
@@ -84,29 +87,4 @@ public class VotingService {
         repository.save(VotingDTO.toEntity(dto));
     }
 
-    @Transactional(readOnly = true)
-    public VotingDTO searchResultVoting(Integer contractId, Integer votingSessionId) {
-        log.debug("Contabilizando os votos para contractId = {}, votingSessionId = {}", contractId, votingSessionId);
-
-        return VotingDTO.builder()
-                .contractId(contractId)
-                .votingSessionId(votingSessionId)
-                .quantityVoteYes(repository.countVotingByContractIdAndVotingSessionIdAndVote(contractId, votingSessionId, Boolean.TRUE))
-                .quantityVoteNo(repository.countVotingByContractIdAndVotingSessionIdAndVote(contractId, votingSessionId, Boolean.FALSE))
-                .build();
-    }
-
-    @Transactional(readOnly = true)
-    public ResultDTO searchDataResultVoting(Integer contractId, Integer votingSessionId) {
-        if (isValidDateExist(contractId, votingSessionId) && votingSessionService.isSessaoValidaForCount(votingSessionId)) {
-            log.debug("Construindo o objeto de retorno do resultado para contractId = {}, votingSessionId = {}", contractId, votingSessionId);
-            return new ResultDTO(contractService.searchContractById(contractId), searchResultVoting(contractId, votingSessionId));
-        }
-        throw new NotFoundException("Sessão de votação ainda está aberta, não é possível obter a contagem do resultado.");
-    }
-
-    @Transactional(readOnly = true)
-    public boolean isValidDateExist(Integer contractId, Integer votingSessionId) {
-        return votingSessionService.isSessionVoting(votingSessionId) && contractService.isContractValid(contractId);
-    }
 }

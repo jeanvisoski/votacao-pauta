@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResultDTO {
 
-    private ContractDTO contractDTO;
+    private ScheduleDTO contractDTO;
     private VotingDTO votingDTO;
 }
