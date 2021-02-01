@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Data
@@ -22,8 +21,7 @@ import javax.persistence.Table;
 public class VotingEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "ID")
-    @SequenceGenerator(name = "ID", sequenceName = "VOTING_SEQ",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
 

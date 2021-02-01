@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -23,8 +22,7 @@ import java.time.LocalDateTime;
 public class VotingSessionEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "ID")
-    @SequenceGenerator(name = "ID", sequenceName = "VOTING_SESSION_SEQ",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
 

@@ -1,6 +1,7 @@
 package com.api.scheduleVoting.service;
 
 import com.api.scheduleVoting.BaseTest;
+import com.api.scheduleVoting.client.ValidCPFClient;
 import com.api.scheduleVoting.dtos.ScheduleDTO;
 import com.api.scheduleVoting.entity.ScheduleEntity;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class ScheduleServiceTest extends BaseTest {
 
     @MockBean
     private ScheduleService service;
+
+    @MockBean
+    private ValidCPFClient validCPFClient;
 
     private static final String DESCRICAO = "PRIMEIRA PAUTA TESTE";
     private static final Integer ID = 1;

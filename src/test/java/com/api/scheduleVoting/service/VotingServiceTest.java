@@ -1,6 +1,7 @@
 package com.api.scheduleVoting.service;
 
 import com.api.scheduleVoting.BaseTest;
+import com.api.scheduleVoting.client.ValidCPFClient;
 import com.api.scheduleVoting.dtos.VoteDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
@@ -18,6 +19,9 @@ public class VotingServiceTest extends BaseTest {
 
     @MockBean
     private VotingService service;
+
+    @MockBean
+    private ValidCPFClient validCPFClient;
 
     @Test
     public void testOpenVotingSession() throws Exception {

@@ -22,8 +22,7 @@ import javax.persistence.Table;
 public class ScheduleEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "ID")
-    @SequenceGenerator(name = "ID", sequenceName = "SCHEDULE_SEQ",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
 

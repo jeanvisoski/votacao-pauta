@@ -1,10 +1,12 @@
 package com.api.scheduleVoting.controller;
 
 import com.api.scheduleVoting.BaseTest;
+import com.api.scheduleVoting.client.ValidCPFClient;
 import com.api.scheduleVoting.entity.ScheduleEntity;
 import com.api.scheduleVoting.service.ScheduleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +30,9 @@ public class ScheduleControllerTest extends BaseTest {
 
     @MockBean
     private ScheduleService service;
+
+    @MockBean
+    private ValidCPFClient validCPFClient;
 
     @Test
     public void testCreateSchedule() throws Exception {

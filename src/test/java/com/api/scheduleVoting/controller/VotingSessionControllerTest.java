@@ -1,6 +1,7 @@
 package com.api.scheduleVoting.controller;
 
 import com.api.scheduleVoting.BaseTest;
+import com.api.scheduleVoting.client.ValidCPFClient;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
 import com.api.scheduleVoting.service.VotingSessionService;
 import org.junit.Test;
@@ -28,6 +29,9 @@ public class VotingSessionControllerTest extends BaseTest {
 
     @MockBean
     private VotingSessionService service;
+
+    @MockBean
+    private ValidCPFClient validCPFClient;
 
     @Test
     public void testCreateNewSession() throws Exception {
