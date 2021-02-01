@@ -14,7 +14,7 @@ identificado por um id único e pode votar apenas uma vez por pauta);
 * Java 8
 * Spring Boot Web; JPA; Data;
 * Swagger 2
-* Oracle DataBase enterprise
+* MySQL
 * H2 Database
 
 ### Instalação
