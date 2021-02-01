@@ -27,11 +27,21 @@ $ cd target
 $ java -jar votacao-pauta.jar
 ```
 #### Swagger
+Heroku
+```
+https://app-votavao-pauta.herokuapp.com/swagger-ui.html
+```
+
 Desenvolvimento:
 ```
 http://localhost:8080/swagger-ui.html#/
 ```
 
+### Heroku Cloud Plataform
+
+```
+https://app-votavao-pauta.herokuapp.com/api/v1/
+```
 ### Versionamento
     - Os endpoints são versionados pelo número major da versão (v1) diretamente na URL de acesso.
 
