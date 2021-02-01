@@ -13,3 +13,4 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+URL: "https://user-info.herokuapp.com/users/{cpf}"
