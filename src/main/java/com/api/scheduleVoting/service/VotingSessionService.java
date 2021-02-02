@@ -1,10 +1,9 @@
 package com.api.scheduleVoting.service;
 
-import com.api.scheduleVoting.dtos.ResultDTO;
-import com.api.scheduleVoting.dtos.ScheduleDTO;
 import com.api.scheduleVoting.dtos.VotingDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.dtos.VotingSessionDTO;
+import com.api.scheduleVoting.entity.VotingEntity;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
 import com.api.scheduleVoting.exception.NotFoundException;
 import com.api.scheduleVoting.repository.VotingRepository;
@@ -28,21 +27,21 @@ public class VotingSessionService {
 
     private final VotingSessionRepository repository;
     private final VotingRepository votingRepository;
-    private final ScheduleService contractService;
+    private final ScheduleService scheduleService;
     private static final String UTC = "UTC-3";
 
     @Autowired
     public VotingSessionService(VotingSessionRepository repository, VotingRepository votingRepository, ScheduleService contractService) {
         this.repository = repository;
         this.votingRepository = votingRepository;
-        this.contractService = contractService;
+        this.scheduleService = contractService;
     }
 
     @Transactional
     public VotingSessionEntity openVotingSession(VotingSessionOpenDTO VotingSessionOpenDTO) {
         log.debug("Abrindo a sessao de votacao para a pauta {}", VotingSessionOpenDTO.getScheduleId());
 
-        if (contractService.isScheduleId(VotingSessionOpenDTO.getScheduleId())) {
+        if (scheduleService.isScheduleId(VotingSessionOpenDTO.getScheduleId())) {
             return save(VotingSessionDTO.builder()
                     .id(null)
                     .dateTimeStart(LocalDateTime.now(ZoneId.of(UTC)))
@@ -112,28 +111,31 @@ public class VotingSessionService {
     }
 
     @Transactional(readOnly = true)
-    public ResultDTO searchDataResultVoting(Integer scheduleId, Integer votingSessionId) {
-        if (isValidDateExist(scheduleId, votingSessionId) && isSessaoValidaForCount(votingSessionId)) {
-            log.debug("Construindo o objeto de retorno do resultado para scheduleId = {}, votingSessionId = {}", scheduleId, votingSessionId);
-            return new ResultDTO(ScheduleDTO.toDTO(contractService.searchScheduleById(scheduleId)), searchResultVoting(scheduleId, votingSessionId));
+    public VotingDTO searchDataResultVoting(Integer votingSessionId) {
+        if (isValidDateExist(votingSessionId) && isSessaoValidaForCount(votingSessionId)) {
+            log.debug("Construindo o objeto de retorno do resultado para votingSessionId = {}", votingSessionId);
+            return searchResultVoting(votingSessionId);
         }
         throw new NotFoundException("Sessão de votação ainda está aberta, não é possível obter a contagem do resultado.");
     }
 
     @Transactional(readOnly = true)
-    public boolean isValidDateExist(Integer scheduleId, Integer votingSessionId) {
-        return isSessionVoting(votingSessionId) && contractService.isScheduleId(scheduleId);
+    public boolean isValidDateExist(Integer votingSessionId) {
+        return isSessionVoting(votingSessionId);
     }
 
     @Transactional(readOnly = true)
-    public VotingDTO searchResultVoting(Integer scheduleId, Integer votingSessionId) {
-        log.debug("Contabilizando os votos para scheduleId = {}, votingSessionId = {}", scheduleId, votingSessionId);
+    public VotingDTO searchResultVoting(Integer votingSessionId) {
+        log.debug("Contabilizando os votos para votingSessionId = {}", votingSessionId);
 
         return VotingDTO.builder()
-                .scheduleId(scheduleId)
+                .scheduleId(votingRepository.findByVotingSessionId(votingSessionId)
+                        .stream()
+                        .map(VotingEntity::getScheduleId)
+                        .collect(Collectors.toList()).get(0))
                 .votingSessionId(votingSessionId)
-                .quantityVoteYes(votingRepository.countVotingByScheduleIdAndVotingSessionIdAndVote(scheduleId, votingSessionId, Boolean.TRUE))
-                .quantityVoteNo(votingRepository.countVotingByScheduleIdAndVotingSessionIdAndVote(scheduleId, votingSessionId, Boolean.FALSE))
+                .quantityVoteYes(votingRepository.countVotingByVotingSessionIdAndVote(votingSessionId, Boolean.TRUE))
+                .quantityVoteNo(votingRepository.countVotingByVotingSessionIdAndVote(votingSessionId, Boolean.FALSE))
                 .build();
     }
 }

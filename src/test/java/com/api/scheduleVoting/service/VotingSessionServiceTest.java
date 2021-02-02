@@ -57,33 +57,33 @@ public class VotingSessionServiceTest extends BaseTest {
     }
 
 
-    @Test
-    public void testSearchDataResultVoting() throws Exception {
-
-        when(service.searchDataResultVoting(any(), any())).thenReturn(ResultDTO.builder()
-                .scheduleDTO(ScheduleDTO.builder()
-                        .id(ID)
-                        .descricao(DESCRICAO)
-                        .build())
-                .votingDTO(VotingDTO.builder()
-                        .id(ID)
-                        .quantityVoteYes(1)
-                        .build())
-                .build());
-
-
-        ResultDTO response = service.searchDataResultVoting(1,1);
-
-        assertThat(response).isEqualTo(ResultDTO.builder()
-                .scheduleDTO(ScheduleDTO.builder()
-                        .id(ID)
-                        .descricao(DESCRICAO)
-                        .build())
-                .votingDTO(VotingDTO.builder()
-                        .id(ID)
-                        .quantityVoteYes(1)
-                        .build())
-                .build());
-    }
+//    @Test
+//    public void testSearchDataResultVoting() throws Exception {
+//
+//        when(service.searchDataResultVoting(any(), any())).thenReturn(ResultDTO.builder()
+//                .scheduleDTO(ScheduleDTO.builder()
+//                        .id(ID)
+//                        .descricao(DESCRICAO)
+//                        .build())
+//                .votingDTO(VotingDTO.builder()
+//                        .id(ID)
+//                        .quantityVoteYes(1)
+//                        .build())
+//                .build());
+//
+//
+//        ResultDTO response = service.searchDataResultVoting(1,1);
+//
+//        assertThat(response).isEqualTo(ResultDTO.builder()
+//                .scheduleDTO(ScheduleDTO.builder()
+//                        .id(ID)
+//                        .descricao(DESCRICAO)
+//                        .build())
+//                .votingDTO(VotingDTO.builder()
+//                        .id(ID)
+//                        .quantityVoteYes(1)
+//                        .build())
+//                .build());
+//    }
 
 }

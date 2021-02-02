@@ -1,6 +1,7 @@
 package com.api.scheduleVoting.controller;
 
 import com.api.scheduleVoting.dtos.ResultDTO;
+import com.api.scheduleVoting.dtos.VotingDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.dtos.VotingSessionDTO;
 import com.api.scheduleVoting.service.VotingService;
@@ -47,10 +48,10 @@ public class VotingSessionController {
     }
 
     @ApiOperation(value = "Buscar os resultados da votação de uma Pauta")
-    @GetMapping(value = "/{votingSessionId}/{scheduleId}/resultado")
-    public ResponseEntity<ResultDTO> resultVoting(@PathVariable("scheduleId") Integer scheduleId, @PathVariable("votingSessionId") Integer votingSessionId) {
-        log.debug("Buscando resultado da votacao scheduleId = {} , votingSessionId = {} ", scheduleId, votingSessionId);
-        return ResponseEntity.status(HttpStatus.OK).body(service.searchDataResultVoting(scheduleId, votingSessionId));
+    @GetMapping(value = "/{votingSessionId}/resultado")
+    public ResponseEntity<VotingDTO> resultVoting(@PathVariable("votingSessionId") Integer votingSessionId) {
+        log.debug("Buscando resultado da votacao votingSessionId = {} ", votingSessionId);
+        return ResponseEntity.status(HttpStatus.OK).body(service.searchDataResultVoting(votingSessionId));
     }
 
 
