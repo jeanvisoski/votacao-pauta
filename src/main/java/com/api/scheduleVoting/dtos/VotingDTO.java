@@ -1,6 +1,5 @@
 package com.api.scheduleVoting.dtos;
 
-import com.api.scheduleVoting.entity.VotingEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,13 +25,4 @@ public class VotingDTO {
     private Integer quantityVoteYes;
 
     private Integer quantityVoteNo;
-
-    public static VotingEntity toEntity(VotingDTO dto) {
-        return VotingEntity.builder()
-                .id(dto.getId())
-                .scheduleId(dto.getScheduleId())
-                .votingSessionId(dto.getVotingSessionId())
-                .vote(dto.getVote())
-                .build();
-    }
 }

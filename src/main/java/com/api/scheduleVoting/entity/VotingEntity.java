@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Data
 @Builder
 @Entity
-@Table(name = "voting")
+@Table(name = "VOTING")
 @AllArgsConstructor
 @NoArgsConstructor
 public class VotingEntity {
@@ -25,12 +25,10 @@ public class VotingEntity {
     @Column(name = "ID")
     private Integer id;
 
-    @Column
+    @Column(name = "VOTE")
     private Boolean vote;
 
-    @Column
     private Integer scheduleId;
 
-    @Column
     private Integer votingSessionId;
 }

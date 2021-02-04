@@ -4,6 +4,7 @@ import com.api.scheduleVoting.BaseTest;
 import com.api.scheduleVoting.client.ValidCPFClient;
 import com.api.scheduleVoting.dtos.ScheduleDTO;
 import com.api.scheduleVoting.entity.ScheduleEntity;
+import com.api.scheduleVoting.exception.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,6 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @EnableSpringDataWebSupport
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 public class ScheduleServiceTest extends BaseTest {
 
-    @MockBean
+    @Autowired
     private ScheduleService service;
 
     @MockBean
@@ -33,40 +32,44 @@ public class ScheduleServiceTest extends BaseTest {
     private static final Integer ID = 1;
 
     @Test
-    public void testSaveSchedule() throws Exception {
-
-        when(service.save(any())).thenReturn(ScheduleEntity.builder()
+    public void testSaveSchedule() {
+        ScheduleEntity request = ScheduleEntity.builder()
                 .id(ID)
-                .descricao(DESCRICAO)
-                .build());
+                .description(DESCRICAO)
+                .build();
 
         ScheduleEntity response = service.save(ScheduleDTO.builder()
                 .id(ID)
-                .descricao(DESCRICAO)
+                .description(DESCRICAO)
                 .build());
 
-        assertThat(response).isEqualTo(ScheduleEntity.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build());
-
+        assertThat(response).isEqualTo(request);
     }
 
     @Test
-    public void testSearchScheduleByIdSchedule() throws Exception {
-
-        when(service.searchScheduleById(any())).thenReturn(ScheduleEntity.builder()
+    public void testSearchScheduleByIdSchedule() {
+        ScheduleEntity request = ScheduleEntity.builder()
                 .id(ID)
-                .descricao(DESCRICAO)
+                .description(DESCRICAO)
+                .build();
+
+        service.save(ScheduleDTO.builder()
+                .id(ID)
+                .description(DESCRICAO)
                 .build());
 
         ScheduleEntity response = service.searchScheduleById(1);
 
-        assertThat(response).isEqualTo(ScheduleEntity.builder()
-                .id(ID)
-                .descricao(DESCRICAO)
-                .build());
-
+        assertThat(response).isEqualTo(request);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundIdSchedule() {
+        service.searchScheduleById(1);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testIsScheduleIdNotFound() {
+        service.isScheduleId(10);
+    }
 }

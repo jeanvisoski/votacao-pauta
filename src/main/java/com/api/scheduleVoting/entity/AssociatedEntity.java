@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Data
 @Builder
 @Entity
-@Table(name = "associated")
+@Table(name = "ASSOCIATED")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssociatedEntity {
@@ -25,9 +25,8 @@ public class AssociatedEntity {
     @Column(name = "ID")
     private Integer id;
 
-    @Column
+    @Column(name = "ASSOCIATED_CPF")
     private String associatedCpf;
 
-    @Column
     private Integer scheduleId;
 }

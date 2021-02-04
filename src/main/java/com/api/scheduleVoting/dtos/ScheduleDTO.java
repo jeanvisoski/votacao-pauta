@@ -17,19 +17,19 @@ public class ScheduleDTO {
     private Integer id;
 
     @NotBlank(message = "Descrição deve ser preenchido")
-    private String descricao;
+    private String description;
 
     public static ScheduleEntity toEntity(ScheduleDTO dto) {
         return ScheduleEntity.builder()
                 .id(dto.getId())
-                .descricao(dto.getDescricao())
+                .description(dto.getDescription())
                 .build();
     }
 
     public static ScheduleDTO toDTO(ScheduleEntity contract) {
         return ScheduleDTO.builder()
                 .id(contract.getId())
-                .descricao(contract.getDescricao())
+                .description(contract.getDescription())
                 .build();
     }
 }

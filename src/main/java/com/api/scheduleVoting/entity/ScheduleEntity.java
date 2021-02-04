@@ -10,13 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Data
 @Builder
 @Entity
-@Table(name = "schedule")
+@Table(name = "SCHEDULE")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleEntity {
@@ -26,6 +25,6 @@ public class ScheduleEntity {
     @Column(name = "ID")
     private Integer id;
 
-    @Column
-    private String descricao;
+    @Column(name = "DESCRIPTION")
+    private String description;
 }

@@ -6,7 +6,6 @@ import com.api.scheduleVoting.entity.ScheduleEntity;
 import com.api.scheduleVoting.service.ScheduleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,7 +38,7 @@ public class ScheduleControllerTest extends BaseTest {
 
         when(service.save(any())).thenReturn(ScheduleEntity.builder()
                 .id(1)
-                .descricao("PRIMEIRA PAUTA TESTE")
+                .description("PRIMEIRA PAUTA TESTE")
                 .build());
 
         mockMvc.perform(post("/api/v1/pauta")
@@ -54,7 +53,7 @@ public class ScheduleControllerTest extends BaseTest {
 
         when(service.searchScheduleById(any())).thenReturn(ScheduleEntity.builder()
                 .id(1)
-                .descricao("PRIMEIRA PAUTA TESTE")
+                .description("PRIMEIRA PAUTA TESTE")
                 .build());
 
         mockMvc.perform(get("/api/v1/pauta/1")

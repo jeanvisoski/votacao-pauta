@@ -2,16 +2,18 @@ package com.api.scheduleVoting.service;
 
 import com.api.scheduleVoting.BaseTest;
 import com.api.scheduleVoting.client.ValidCPFClient;
-import com.api.scheduleVoting.dtos.ResultDTO;
-import com.api.scheduleVoting.dtos.ScheduleDTO;
+import com.api.scheduleVoting.dtos.VoteDTO;
 import com.api.scheduleVoting.dtos.VotingDTO;
+import com.api.scheduleVoting.dtos.VotingSessionDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
+import com.api.scheduleVoting.repository.VotingRepository;
 import org.junit.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,71 +21,76 @@ import static org.mockito.Mockito.when;
 
 public class VotingSessionServiceTest extends BaseTest {
 
-    @MockBean
+    @Autowired
     private VotingSessionService service;
+
+    @Autowired
+    private VotingService votingService;
 
     @MockBean
     private ValidCPFClient validCPFClient;
 
+    @MockBean
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @MockBean
+    private VotingRepository votingRepository;
+
+    @MockBean
+    private AssociatedService associatedService;
+
     private static final Integer ID = 1;
-    private static final String DESCRICAO = "PRIMEIRA PAUTA TESTE";
 
     @Test
-    public void testOpenVotingSession() throws Exception {
-
-        when(service.openVotingSession(any())).thenReturn(VotingSessionEntity.builder()
-                .id(ID)
-                .dateTimeStart(LocalDateTime.of(2021,
-                        Month.JULY, 29, 19, 30, 40))
-                .dateTimeEnd(LocalDateTime.of(2021,
-                        Month.JULY, 29, 20, 30, 40))
-                .active(Boolean.TRUE)
-                .build());
-
+    public void testOpenVotingSession() {
+        when(scheduleService.isScheduleId(any())).thenReturn(Boolean.TRUE);
 
         VotingSessionEntity response = service.openVotingSession(VotingSessionOpenDTO.builder()
                 .scheduleId(ID)
                 .time(1)
                 .build());
 
-        assertThat(response).isEqualTo(VotingSessionEntity.builder()
-                .id(ID)
-                .dateTimeStart(LocalDateTime.of(2021,
-                        Month.JULY, 29, 19, 30, 40))
-                .dateTimeEnd(LocalDateTime.of(2021,
-                        Month.JULY, 29, 20, 30, 40))
-                .active(Boolean.TRUE)
-                .build());
+        assertThat(response).isNotNull();
     }
 
+    @Test
+    public void testSearchDataResultVoting() {
+        when(scheduleService.isScheduleId(any())).thenReturn(Boolean.TRUE);
 
-//    @Test
-//    public void testSearchDataResultVoting() throws Exception {
-//
-//        when(service.searchDataResultVoting(any(), any())).thenReturn(ResultDTO.builder()
-//                .scheduleDTO(ScheduleDTO.builder()
-//                        .id(ID)
-//                        .descricao(DESCRICAO)
-//                        .build())
-//                .votingDTO(VotingDTO.builder()
-//                        .id(ID)
-//                        .quantityVoteYes(1)
-//                        .build())
-//                .build());
-//
-//
-//        ResultDTO response = service.searchDataResultVoting(1,1);
-//
-//        assertThat(response).isEqualTo(ResultDTO.builder()
-//                .scheduleDTO(ScheduleDTO.builder()
-//                        .id(ID)
-//                        .descricao(DESCRICAO)
-//                        .build())
-//                .votingDTO(VotingDTO.builder()
-//                        .id(ID)
-//                        .quantityVoteYes(1)
-//                        .build())
-//                .build());
-//    }
+        VotingSessionEntity votingSessionEntity = service.openVotingSession(VotingSessionOpenDTO.builder()
+                .scheduleId(ID)
+                .time(1)
+                .build());
+
+        when(scheduleService.isScheduleId(any())).thenReturn(Boolean.TRUE);
+        when(validCPFClient.isVerifiesAssociatedEnabledVoting(any())).thenReturn(Boolean.TRUE);
+        when(associatedService.isValidVotingMemberParticipation(any(), any())).thenReturn(Boolean.TRUE);
+        when(associatedService.isAssociatedCanVote(any())).thenReturn(Boolean.TRUE);
+
+        votingService.vote(VoteDTO.builder()
+                .associatedCpf("03577834099")
+                .scheduleId(1)
+                .voting(Boolean.TRUE)
+                .votingSessionId(1)
+                .build());
+
+        service.closeVotingSession(modelMapper.map(votingSessionEntity, VotingSessionDTO.class));
+
+        when(votingRepository.findByVotingSessionId(any())).thenReturn(Collections.singletonList(VotingDTO.builder()
+                .id(1)
+                .quantityVoteYes(1)
+                .quantityVoteNo(0)
+                .scheduleId(1)
+                .vote(Boolean.TRUE)
+                .votingSessionId(2)
+                .build()));
+
+        VotingDTO response = service.searchDataResultVoting(2);
+
+        assertThat(response).isNotNull();
+    }
 
 }

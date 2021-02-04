@@ -3,11 +3,13 @@ package com.api.scheduleVoting.service;
 import com.api.scheduleVoting.dtos.AssociatedDTO;
 import com.api.scheduleVoting.dtos.VoteDTO;
 import com.api.scheduleVoting.dtos.VotingDTO;
+import com.api.scheduleVoting.entity.VotingEntity;
 import com.api.scheduleVoting.exception.NotFoundException;
 import com.api.scheduleVoting.exception.SessionFindException;
 import com.api.scheduleVoting.exception.InvalidVoteException;
 import com.api.scheduleVoting.repository.VotingRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class VotingService {
     private final ScheduleService scheduleService;
     private final VotingSessionService votingSessionService;
     private final AssociatedService associatedService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     public VotingService(VotingRepository repository, ScheduleService scheduleService, VotingSessionService sessaoVotacaoService, AssociatedService associadoService) {
@@ -82,7 +87,7 @@ public class VotingService {
     @Transactional
     public void registerVote(VotingDTO dto) {
         log.debug("Salvando o voto para scheduleId {}", dto.getScheduleId());
-        repository.save(VotingDTO.toEntity(dto));
+        repository.save(modelMapper.map(dto, VotingEntity.class));
     }
 
 }

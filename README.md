@@ -11,8 +11,19 @@ identificado por um id único e pode votar apenas uma vez por pauta);
   - Contabilizar os votos e dar o resultado da votação na pauta.
 ### Tech
 
+O motivo das tecnologias utilizadas a baixo foram pelo meu conhecimento
+e a facilidade que as mesmas proporcionam diante ao desenvolvimento Java.
+
+Por exemplo o spring boot que facilita e agiliza a configuração, O hibernate
+como já cria a estrutura logica do banco de dados, assim não precisamos criar
+manualmente os scripts.
+
+O Swagger que serve para termos uma melhor documentação da api.
+
+O Mysql foi utilizado pois é agil para pequenas aplicações e podemos utilizar no Heroku
+
 * Java 8
-* Spring Boot Web; JPA; Data;
+* Spring Boot Web; Hibernate; Data;
 * Swagger 2
 * MySQL
 * H2 Database

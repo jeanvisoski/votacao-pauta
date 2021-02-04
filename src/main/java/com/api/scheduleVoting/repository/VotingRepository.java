@@ -12,5 +12,5 @@ public interface VotingRepository extends JpaRepository<VotingEntity, Integer> {
 
     Integer countVotingByVotingSessionIdAndVote(Integer votingSessionId, Boolean vote);
 
-    List<VotingEntity> findByVotingSessionId(Integer votingSessionId);
+    List<VotingDTO> findByVotingSessionId(Integer votingSessionId);
 }

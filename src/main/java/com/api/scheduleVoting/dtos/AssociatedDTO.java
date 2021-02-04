@@ -1,6 +1,5 @@
 package com.api.scheduleVoting.dtos;
 
-import com.api.scheduleVoting.entity.AssociatedEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +23,4 @@ public class AssociatedDTO {
 
     @NotNull(message = "scheduleId deve ser preenchido")
     private Integer scheduleId;
-
-    public static AssociatedEntity toEntity(AssociatedDTO dto) {
-        return AssociatedEntity.builder()
-                .id(dto.getId())
-                .associatedCpf(dto.getAssociatedCpf())
-                .scheduleId(dto.getScheduleId())
-                .build();
-    }
 }

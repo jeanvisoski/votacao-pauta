@@ -1,6 +1,5 @@
 package com.api.scheduleVoting.controller;
 
-import com.api.scheduleVoting.dtos.ResultDTO;
 import com.api.scheduleVoting.dtos.VotingDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.dtos.VotingSessionDTO;

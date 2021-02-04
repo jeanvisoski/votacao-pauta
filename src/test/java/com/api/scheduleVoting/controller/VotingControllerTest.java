@@ -2,10 +2,7 @@ package com.api.scheduleVoting.controller;
 
 import com.api.scheduleVoting.BaseTest;
 import com.api.scheduleVoting.client.ValidCPFClient;
-import com.api.scheduleVoting.entity.VotingEntity;
-import com.api.scheduleVoting.entity.VotingSessionEntity;
 import com.api.scheduleVoting.service.VotingService;
-import com.api.scheduleVoting.service.VotingSessionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,9 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.ResultActions;
-
-import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Entity
-@Table(name = "voting_session")
+@Table(name = "VOTING_SESSION")
 @AllArgsConstructor
 @NoArgsConstructor
 public class VotingSessionEntity {
@@ -26,13 +26,13 @@ public class VotingSessionEntity {
     @Column(name = "ID")
     private Integer id;
 
-    @Column
+    @Column(name = "DATE_TIME_START")
     private LocalDateTime dateTimeStart;
 
-    @Column
+    @Column(name = "DATE_TIME_END")
     private LocalDateTime dateTimeEnd;
 
-    @Column
+    @Column(name = "ACTIVE")
     private Boolean active;
 
 }

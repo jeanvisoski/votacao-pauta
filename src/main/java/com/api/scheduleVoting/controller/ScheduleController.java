@@ -30,7 +30,7 @@ public class ScheduleController {
     @ApiOperation(value = "Criar uma pauta para ser votada")
     @PostMapping
     public ResponseEntity<ScheduleDTO> SaveSchedule(@Valid @RequestBody ScheduleDTO scheduleDTO) {
-        log.debug("Salvando pauta  = {}", scheduleDTO.getDescricao());
+        log.debug("Salvando pauta  = {}", scheduleDTO.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED).body(ScheduleDTO.toDTO(service.save(scheduleDTO)));
     }
 
