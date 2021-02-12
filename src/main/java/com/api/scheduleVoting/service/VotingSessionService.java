@@ -3,6 +3,7 @@ package com.api.scheduleVoting.service;
 import com.api.scheduleVoting.dtos.VotingDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
 import com.api.scheduleVoting.dtos.VotingSessionDTO;
+import com.api.scheduleVoting.entity.VotingEntity;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
 import com.api.scheduleVoting.exception.NotFoundException;
 import com.api.scheduleVoting.repository.VotingRepository;
@@ -131,7 +132,7 @@ public class VotingSessionService {
         return VotingDTO.builder()
                 .scheduleId(votingRepository.findByVotingSessionId(votingSessionId)
                         .stream()
-                        .map(VotingDTO::getScheduleId)
+                        .map(votingEntity -> votingEntity.getSchedule().getId())
                         .collect(Collectors.toList()).get(0))
                 .votingSessionId(votingSessionId)
                 .quantityVoteYes(votingRepository.countVotingByVotingSessionIdAndVote(votingSessionId, Boolean.TRUE))

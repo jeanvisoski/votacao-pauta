@@ -5,11 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
@@ -28,7 +32,9 @@ public class VotingEntity {
     @Column(name = "VOTE")
     private Boolean vote;
 
-    private Integer scheduleId;
+    @ManyToOne()
+    private ScheduleEntity schedule;
 
-    private Integer votingSessionId;
+    @ManyToOne()
+    private VotingSessionEntity votingSession;
 }

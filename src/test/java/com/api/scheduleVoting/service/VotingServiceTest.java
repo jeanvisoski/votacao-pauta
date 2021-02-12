@@ -2,11 +2,15 @@ package com.api.scheduleVoting.service;
 
 import com.api.scheduleVoting.BaseTest;
 import com.api.scheduleVoting.client.ValidCPFClient;
+import com.api.scheduleVoting.dtos.ScheduleDTO;
 import com.api.scheduleVoting.dtos.VoteDTO;
+import com.api.scheduleVoting.entity.VotingEntity;
 import com.api.scheduleVoting.exception.InvalidVoteException;
 import com.api.scheduleVoting.exception.NotFoundException;
 import com.api.scheduleVoting.exception.SessionFindException;
+import com.api.scheduleVoting.repository.VotingRepository;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -31,6 +35,9 @@ public class VotingServiceTest extends BaseTest {
     @MockBean
     private AssociatedService associatedService;
 
+    @MockBean
+    private VotingRepository votingRepository;
+
     @Test
     public void testVotingSuccess() {
         VoteDTO request = VoteDTO.builder()
@@ -45,6 +52,8 @@ public class VotingServiceTest extends BaseTest {
         when(validCPFClient.isVerifiesAssociatedEnabledVoting(any())).thenReturn(Boolean.TRUE);
         when(associatedService.isValidVotingMemberParticipation(any(), any())).thenReturn(Boolean.TRUE);
         when(associatedService.isAssociatedCanVote(any())).thenReturn(Boolean.TRUE);
+
+        when(votingRepository.save(any())).thenReturn(VotingEntity.builder().build());
 
         String response = service.vote(request);
 

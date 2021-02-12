@@ -6,6 +6,8 @@ import com.api.scheduleVoting.dtos.VoteDTO;
 import com.api.scheduleVoting.dtos.VotingDTO;
 import com.api.scheduleVoting.dtos.VotingSessionDTO;
 import com.api.scheduleVoting.dtos.VotingSessionOpenDTO;
+import com.api.scheduleVoting.entity.ScheduleEntity;
+import com.api.scheduleVoting.entity.VotingEntity;
 import com.api.scheduleVoting.entity.VotingSessionEntity;
 import com.api.scheduleVoting.repository.VotingRepository;
 import org.junit.Test;
@@ -79,13 +81,15 @@ public class VotingSessionServiceTest extends BaseTest {
 
         service.closeVotingSession(modelMapper.map(votingSessionEntity, VotingSessionDTO.class));
 
-        when(votingRepository.findByVotingSessionId(any())).thenReturn(Collections.singletonList(VotingDTO.builder()
+        when(votingRepository.findByVotingSessionId(any())).thenReturn(Collections.singletonList(VotingEntity.builder()
                 .id(1)
-                .quantityVoteYes(1)
-                .quantityVoteNo(0)
-                .scheduleId(1)
                 .vote(Boolean.TRUE)
-                .votingSessionId(2)
+                .schedule(ScheduleEntity.builder()
+                        .id(1)
+                        .build())
+                .votingSession(VotingSessionEntity.builder()
+                        .id(2)
+                        .build())
                 .build()));
 
         VotingDTO response = service.searchDataResultVoting(2);
